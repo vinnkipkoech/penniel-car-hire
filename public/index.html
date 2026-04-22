@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penniel Car Hire | Your Satisfaction Our Priority</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        html { scroll-behavior: smooth; }
+        
+        .hero-bg {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                              url('https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&q=80&w=1920');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .whatsapp-float {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background-color: #25d366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            box-shadow: 2px 4px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .whatsapp-float:hover { transform: scale(1.1); background-color: #128c7e; }
+
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-900">
+
+    <div id="bookingModal" class="hidden fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-8 shadow-2xl custom-scrollbar">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h2 class="text-2xl font-black">Reserve Your Vehicle</h2>
+                    <p class="text-sm text-gray-500 text-blue-600">Secure booking for your next journey</p>
+                </div>
+                <button onclick="toggleModal(false)" class="text-gray-400 hover:text-red-500 text-3xl transition">&times;</button>
+            </div>
+            
+            <form id="finalBookingForm" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[10px] font-bold uppercase text-gray-400">Selected Model</label>
+                        <input type="text" id="carModel" readonly class="w-full p-3 border rounded-xl bg-gray-50 font-bold text-blue-600 outline-none">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold uppercase text-gray-400">Full Name</label>
+                        <input type="text" required class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Enter Full Name">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input type="email" placeholder="Email Address" required class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                    <input type="tel" placeholder="Phone Number (e.g. 07...)" required class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                    <div><label class="text-[10px] font-bold uppercase text-gray-400">Pickup Date</label><input type="date" required class="w-full p-2 border rounded-lg text-sm outline-none"></div>
+                    <div><label class="text-[10px] font-bold uppercase text-gray-400">Time</label><input type="time" required class="w-full p-2 border rounded-lg text-sm outline-none"></div>
+                    <div><label class="text-[10px] font-bold uppercase text-gray-400">Return Date</label><input type="date" required class="w-full p-2 border rounded-lg text-sm outline-none"></div>
+                    <div><label class="text-[10px] font-bold uppercase text-gray-400">Time</label><input type="time" required class="w-full p-2 border rounded-lg text-sm outline-none"></div>
+                </div>
+
+                <div>
+                    <label class="text-[10px] font-bold uppercase text-gray-400">Location Details</label>
+                    <div class="flex gap-2">
+                        <select class="p-3 border rounded-xl bg-white text-sm outline-none">
+                            <option>Office Pickup</option>
+                            <option>JKIA / Wilson Airport</option>
+                            <option>Home/Hotel Delivery</option>
+                        </select>
+                        <input type="text" id="pickupLoc" placeholder="Specific Landmark or Live Location" required class="w-full p-3 border rounded-xl outline-none">
+                        <button type="button" onclick="getLiveLocation()" class="bg-blue-100 text-blue-600 px-4 rounded-xl hover:bg-blue-200 transition" title="Get Live Location">📍</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t">
+                    <input type="password" placeholder="Create Password" required class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                    <input type="password" placeholder="Confirm Password" required class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                
+                <button type="submit" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold hover:bg-blue-700 shadow-lg transition-all transform hover:-translate-y-1">Confirm Booking & Create Account</button>
+            </form>
+        </div>
+    </div>
+
+    <a href="https://wa.me/254700000000" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
+
+    <nav class="bg-white shadow-md p-4 flex justify-between items-center sticky top-0 z-50 px-6">
+        <h1 class="text-2xl font-black tracking-tighter">PENNIEL <span class="text-blue-600">CAR HIRE</span></h1>
+        <div class="hidden lg:flex space-x-8 font-bold text-xs uppercase tracking-widest text-gray-600">
+            <a href="#home" class="hover:text-blue-600">Home</a>
+            <a href="#fleet" class="hover:text-blue-600">Fleet</a>
+            <a href="#faq" class="hover:text-blue-600">FAQ</a>
+            <a href="#terms" class="hover:text-blue-600">Terms</a>
+            <a href="#contact" class="hover:text-blue-600">Contact</a>
+        </div>
+        <button class="bg-gray-100 text-gray-800 px-6 py-2 rounded-full font-bold text-xs uppercase hover:bg-gray-200 transition">Client Login</button>
+    </nav>
+
+    <section id="home" class="hero-bg min-h-[80vh] flex flex-col items-center justify-center text-white text-center px-4">
+        <div class="max-w-4xl">
+            <span class="uppercase tracking-[0.3em] text-blue-400 font-bold mb-4 block">Nairobi's Premier Rentals</span>
+            <h2 class="text-5xl md:text-7xl font-black mb-6 leading-tight">Your Satisfaction <br><span class="text-blue-500">Our Priority</span></h2>
+            <p class="text-lg md:text-xl mb-10 text-gray-300 max-w-2xl mx-auto">Providing quality vehicles and seamless experiences since 2024.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#fleet" class="bg-blue-600 px-10 py-4 rounded-full font-bold hover:bg-blue-700 shadow-xl transition transform hover:scale-105">View Fleet</a>
+                <a href="https://wa.me/254700000000" class="bg-white/10 backdrop-blur border border-white/30 px-10 py-4 rounded-full font-bold hover:bg-white hover:text-gray-900 transition-all">Quick Inquiry</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="fleet" class="container mx-auto py-20 px-4">
+        <div class="text-center mb-16">
+            <h3 class="text-4xl font-black text-gray-900 mb-2 uppercase">Our Available Fleet</h3>
+            <div class="h-1.5 w-24 bg-blue-600 mx-auto rounded-full"></div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8" id="fleet-container">         
+        </div>
+    </section>
+    async function loadCars() {
+    const response = await fetch('http://localhost:5000/api/cars');
+    const cars = await response.json();
+    const container = document.getElementById('fleet-container'); // Add this ID to your fleet div
+    
+    container.innerHTML = cars.map(car => `
+        <div class="bg-white rounded-3xl shadow p-5">
+            <img src="${car.image}" class="w-full h-44 object-cover rounded-2xl mb-4">
+            <h4 class="font-bold text-lg text-gray-800">${car.name}</h4>
+            <p class="text-blue-600 font-black text-2xl mt-1 mb-5">KSh ${car.price}/day</p>
+            <button onclick="toggleModal(true, '${car.name}')" class="w-full bg-gray-900 text-white py-3.5 rounded-2xl font-bold hover:bg-blue-600 transition">Book Now</button>
+        </div>
+    `).join('');
+}
+loadCars();
+
+    <section id="faq" class="py-20 container mx-auto px-4 max-w-4xl">
+        <h3 class="text-3xl font-black text-center mb-12 uppercase">Frequently Asked Questions</h3>
+        <div class="space-y-4">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-blue-600">
+                <h4 class="font-bold text-gray-800">What are the requirements for self-drive?</h4>
+                <p class="text-gray-600 mt-2">A valid National ID/Passport, a valid Driving License (min 2 years experience), and a refundable security deposit.</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-blue-600">
+                <h4 class="font-bold text-gray-800">Do you offer chauffeur-driven services?</h4>
+                <p class="text-gray-600 mt-2">Yes. Professional drivers are available for KSh 2,500/day (Nairobi) and KSh 3,500/day (Outside Nairobi).</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-blue-600">
+                <h4 class="font-bold text-gray-800">Can I return the car to a different location?</h4>
+                <p class="text-gray-600 mt-2">Yes, one-way rentals are possible but may attract a recovery fee depending on the distance from our main office.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="terms" class="bg-gray-100 py-20">
+        <div class="container mx-auto px-4">
+            <h3 class="text-3xl font-black text-center mb-10 uppercase text-gray-800">Terms & Conditions</h3>
+            <div class="max-w-4xl mx-auto bg-white p-8 rounded-3xl shadow-inner h-72 overflow-y-auto custom-scrollbar text-gray-600 leading-relaxed text-sm">
+                <h5 class="font-bold text-blue-600 mb-2 uppercase">1. Rental Duration</h5>
+                <p class="mb-4">Standard rentals are charged per 24-hour cycle. Any excess time over 2 hours is charged as a full day.</p>
+                <h5 class="font-bold text-blue-600 mb-2 uppercase">2. Fuel Policy</h5>
+                <p class="mb-4">Cars are provided with a full tank and must be returned with a full tank. Otherwise, a 15% refueling surcharge applies.</p>
+                <h5 class="font-bold text-blue-600 mb-2 uppercase">3. Insurance Liability</h5>
+                <p class="mb-4">All vehicles are comprehensively insured. The hirer is responsible for the 'Excess' fee in case of an insurance claim.</p>
+                <h5 class="font-bold text-blue-600 mb-2 uppercase">4. Prohibited Territory</h5>
+                <p>Vehicles must not be driven across international borders without explicit 'Comesa' insurance and written consent from management.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact" class="bg-gray-900 text-white pt-20 pb-10 px-6">
+        <div class="container mx-auto grid md:grid-cols-4 gap-12 border-b border-gray-800 pb-12">
+            <div class="col-span-1">
+                <h4 class="text-2xl font-black mb-4">PENNIEL <span class="text-blue-600">CAR HIRE</span></h4>
+                <p class="text-gray-400 text-sm">Your reliable mobility partner in Kenya. We bridge the gap between quality and affordability.</p>
+            </div>
+            <div>
+                <h4 class="font-bold mb-4 text-xs uppercase tracking-widest text-gray-500">Quick Links</h4>
+                <ul class="space-y-2 text-sm text-gray-400">
+                    <li><a href="#home" class="hover:text-white transition">Home</a></li>
+                    <li><a href="#fleet" class="hover:text-white transition">Explore Fleet</a></li>
+                    <li><a href="#faq" class="hover:text-white transition">FAQ</a></li>
+                    <li><a href="#terms" class="hover:text-white transition">Rental Terms</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold mb-4 text-xs uppercase tracking-widest text-gray-500">Reach Us</h4>
+                <p class="text-sm text-gray-400 mb-2">📍 Nairobi, Kenya (Central Branch)</p>
+                <p class="text-sm text-gray-400 mb-2">📞 +254 700 000 000</p>
+                <p class="text-sm text-gray-400">✉️ info@pennielcarhire.co.ke</p>
+            </div>
+            <div>
+                <h4 class="font-bold mb-4 text-xs uppercase tracking-widest text-gray-500">Follow Us</h4>
+                <div class="flex space-x-4 text-xl text-gray-400">
+                    <a href="#" class="hover:text-blue-500"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="hover:text-pink-500"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="hover:text-blue-400"><i class="fab fa-twitter-square"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-10 text-gray-600 text-xs uppercase tracking-widest">
+            &copy; 2026 Penniel Car Hire Kenya. All Rights Reserved.
+        </div>
+    </footer>
+
+    <script>
+        function toggleModal(show, carName = '') {
+            const modal = document.getElementById('bookingModal');
+            if(show) {
+                document.getElementById('carModel').value = carName;
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            } else {
+                modal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        function getLiveLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    document.getElementById('pickupLoc').value = `Lat: ${position.coords.latitude.toFixed(4)}, Lon: ${position.coords.longitude.toFixed(4)}`;
+                }, (error) => {
+                    alert("Please enable location permissions in your browser.");
+                });
+            } else {
+                alert("Geolocation is not supported by your browser.");
+            }
+        }
+
+        // Prevent form refresh for demo
+        document.getElementById('finalBookingForm').onsubmit = (e) => {
+            e.preventDefault();
+            alert("Success! Account created and booking request sent for " + document.getElementById('carModel').value);
+            toggleModal(false);
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Penniel Car Hire</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-100 flex">
+
+    <aside class="w-64 bg-gray-900 min-h-screen text-white p-6 hidden md:block">
+        <h1 class="text-xl font-bold mb-10">PENNIEL <span class="text-blue-500">ADMIN</span></h1>
+        <nav class="space-y-4">
+            <a href="#" class="block p-3 rounded bg-blue-600 font-bold"><i class="fas fa-chart-line mr-2"></i> Dashboard</a>
+            <a href="#" class="block p-3 rounded hover:bg-gray-800 transition"><i class="fas fa-car mr-2"></i> Manage Fleet</a>
+            <a href="#" class="block p-3 rounded hover:bg-gray-800 transition"><i class="fas fa-calendar-check mr-2"></i> Bookings</a>
+            <a href="#" class="block p-3 rounded hover:bg-gray-800 transition"><i class="fas fa-users mr-2"></i> Customers</a>
+            <div class="pt-10">
+                <a href="index.html" class="block p-3 text-gray-400 hover:text-white"><i class="fas fa-external-link-alt mr-2"></i> View Website</a>
+            </div>
+        </nav>
+    </aside>
+
+    <main class="flex-1 p-8">
+        <header class="flex justify-between items-center mb-10">
+            <h2 class="text-3xl font-black text-gray-800">Overview</h2>
+            <div class="flex items-center space-x-4">
+                <span class="text-sm font-bold text-gray-500">Welcome, Admin</span>
+                <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">VK</div>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                <p class="text-gray-400 text-sm font-bold uppercase">Total Bookings</p>
+                <h3 class="text-3xl font-black mt-1">124</h3>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                <p class="text-gray-400 text-sm font-bold uppercase">Active Rentals</p>
+                <h3 class="text-3xl font-black mt-1 text-blue-600">12</h3>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                <p class="text-gray-400 text-sm font-bold uppercase">Revenue (KES)</p>
+                <h3 class="text-3xl font-black mt-1 text-green-600">450k</h3>
+            </div>
+        </div>
+
+        <section class="bg-white rounded-3xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+                <h3 class="font-bold text-lg">Current Fleet</h3>
+                <button onclick="alert('Open Add Car Form')" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-blue-700 transition">+ Add New Car</button>
+            </div>
+            <table class="w-full text-left">
+                <thead class="bg-gray-50 text-gray-400 text-xs uppercase font-bold">
+                    <tr>
+                        <th class="p-4">Vehicle</th>
+                        <th class="p-4">Category</th>
+                        <th class="p-4">Price/Day</th>
+                        <th class="p-4">Status</th>
+                        <th class="p-4 text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100 text-sm">
+                    <tr>
+                        <td class="p-4 font-bold">Toyota Prado TX</td>
+                        <td class="p-4">SUV</td>
+                        <td class="p-4">KSh 15,000</td>
+                        <td class="p-4"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">Available</span></td>
+                        <td class="p-4 text-center space-x-2">
+                            <button class="text-blue-500 hover:underline">Edit</button>
+                            <button class="text-red-500 hover:underline">Remove</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="p-4 font-bold">Mazda CX-5</td>
+                        <td class="p-4">Crossover</td>
+                        <td class="p-4">KSh 6,500</td>
+                        <td class="p-4"><span class="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-xs font-bold">Rented</span></td>
+                        <td class="p-4 text-center space-x-2">
+                            <button class="text-blue-500 hover:underline">Edit</button>
+                            <button class="text-red-500 hover:underline">Remove</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+</body>
+</html>
