@@ -195,7 +195,7 @@
         function getLiveLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition((position) => {
-                    document.getElementById('pickupLoc').value = Lat: ${position.coords.latitude.toFixed(4)}, Lon: ${position.coords.longitude.toFixed(4)};
+                    document.getElementById('pickupLoc').value = `Lat: ${position.coords.latitude.toFixed(4)}, Lon: ${position.coords.longitude.toFixed(4)}`;
                 }, (error) => {
                     alert("Please enable location permissions in your browser.");
                 });
