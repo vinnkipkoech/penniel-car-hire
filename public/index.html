@@ -47,7 +47,7 @@
             <div class="flex justify-between items-center mb-6">
                 <div>
                     <h2 class="text-2xl font-black">Reserve Your Vehicle</h2>
-                    <p class="text-sm text-gray-500 text-blue-600">Secure booking for your next journey</p>
+                    <p class="text-sm text-blue-600 font-bold">Secure booking for your next journey</p>
                 </div>
                 <button onclick="toggleModal(false)" class="text-gray-400 hover:text-red-500 text-3xl transition">&times;</button>
             </div>
@@ -130,38 +130,8 @@
             <h3 class="text-4xl font-black text-gray-900 mb-2 uppercase">Our Available Fleet</h3>
             <div class="h-1.5 w-24 bg-blue-600 mx-auto rounded-full"></div>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8" id="fleet-container">         
-        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8" id="fleet-container"></div>
     </section>
-    async function loadCars() {
-    const response = await fetch('http://pennielcarhire.onrender.com/api/cars'); // Update with your actual API endpoint
-    const cars = await response.json();
-    const container = document.getElementById('fleet-container'); // Add this ID to your fleet div
-    
-    container.innerHTML = cars.map(car => {
-    // Sanitize or escape single quotes for the inline onclick handler
-    const safeName = car.name.replace(/'/g, "\\'");
-    const formattedPrice = Number(car.price).toLocaleString();
-
-    return `
-        <div class="bg-white rounded-3xl shadow p-5">
-            <img 
-                src="${car.image}" 
-                alt="${car.name}" 
-                class="w-full h-44 object-cover rounded-2xl mb-4"
-            />
-            <h4 class="font-bold text-lg text-gray-800">${car.name}</h4>
-            <p class="text-blue-600 font-black text-2xl mt-1 mb-5">KSh ${formattedPrice}/day</p>
-            <button 
-                onclick="toggleModal(true, '${safeName}')" 
-                class="w-full bg-gray-900 text-white py-3.5 rounded-2xl font-bold hover:bg-blue-600 transition">
-                Book Now
-            </button>
-        </div>
-    `;
-}).join('');
-}
-loadCars();
 
     <section id="faq" class="py-20 container mx-auto px-4 max-w-4xl">
         <h3 class="text-3xl font-black text-center mb-12 uppercase">Frequently Asked Questions</h3>
@@ -174,10 +144,6 @@ loadCars();
                 <h4 class="font-bold text-gray-800">Do you offer chauffeur-driven services?</h4>
                 <p class="text-gray-600 mt-2">Yes. Professional drivers are available for KSh 2,500/day (Nairobi) and KSh 3,500/day (Outside Nairobi).</p>
             </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-blue-600">
-                <h4 class="font-bold text-gray-800">Can I return the car to a different location?</h4>
-                <p class="text-gray-600 mt-2">Yes, one-way rentals are possible but may attract a recovery fee depending on the distance from our main office.</p>
-            </div>
         </div>
     </section>
 
@@ -189,10 +155,6 @@ loadCars();
                 <p class="mb-4">Standard rentals are charged per 24-hour cycle. Any excess time over 2 hours is charged as a full day.</p>
                 <h5 class="font-bold text-blue-600 mb-2 uppercase">2. Fuel Policy</h5>
                 <p class="mb-4">Cars are provided with a full tank and must be returned with a full tank. Otherwise, a 15% refueling surcharge applies.</p>
-                <h5 class="font-bold text-blue-600 mb-2 uppercase">3. Insurance Liability</h5>
-                <p class="mb-4">All vehicles are comprehensively insured. The hirer is responsible for the 'Excess' fee in case of an insurance claim.</p>
-                <h5 class="font-bold text-blue-600 mb-2 uppercase">4. Prohibited Territory</h5>
-                <p>Vehicles must not be driven across international borders without explicit 'Comesa' insurance and written consent from management.</p>
             </div>
         </div>
     </section>
@@ -204,27 +166,10 @@ loadCars();
                 <p class="text-gray-400 text-sm">Your reliable mobility partner in Kenya. We bridge the gap between quality and affordability.</p>
             </div>
             <div>
-                <h4 class="font-bold mb-4 text-xs uppercase tracking-widest text-gray-500">Quick Links</h4>
-                <ul class="space-y-2 text-sm text-gray-400">
-                    <li><a href="#home" class="hover:text-white transition">Home</a></li>
-                    <li><a href="#fleet" class="hover:text-white transition">Explore Fleet</a></li>
-                    <li><a href="#faq" class="hover:text-white transition">FAQ</a></li>
-                    <li><a href="#terms" class="hover:text-white transition">Rental Terms</a></li>
-                </ul>
-            </div>
-            <div>
                 <h4 class="font-bold mb-4 text-xs uppercase tracking-widest text-gray-500">Reach Us</h4>
-                <p class="text-sm text-gray-400 mb-2">📍 Nairobi, Kenya (Central Branch)</p>
+                <p class="text-sm text-gray-400 mb-2">📍 Nairobi, Kenya</p>
                 <p class="text-sm text-gray-400 mb-2">📞 +254 700 000 000</p>
                 <p class="text-sm text-gray-400">✉️ info@pennielcarhire.co.ke</p>
-            </div>
-            <div>
-                <h4 class="font-bold mb-4 text-xs uppercase tracking-widest text-gray-500">Follow Us</h4>
-                <div class="flex space-x-4 text-xl text-gray-400">
-                    <a href="#" class="hover:text-blue-500"><i class="fab fa-facebook"></i></a>
-                    <a href="#" class="hover:text-pink-500"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="hover:text-blue-400"><i class="fab fa-twitter-square"></i></a>
-                </div>
             </div>
         </div>
         <div class="text-center mt-10 text-gray-600 text-xs uppercase tracking-widest">
@@ -233,6 +178,7 @@ loadCars();
     </footer>
 
     <script>
+        // 1. Modal Logic
         function toggleModal(show, carName = '') {
             const modal = document.getElementById('bookingModal');
             if(show) {
@@ -245,10 +191,11 @@ loadCars();
             }
         }
 
+        // 2. Geolocation
         function getLiveLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition((position) => {
-                    document.getElementById('pickupLoc').value = `Lat: ${position.coords.latitude.toFixed(4)}, Lon: ${position.coords.longitude.toFixed(4)}`;
+                    document.getElementById('pickupLoc').value = Lat: ${position.coords.latitude.toFixed(4)}, Lon: ${position.coords.longitude.toFixed(4)};
                 }, (error) => {
                     alert("Please enable location permissions in your browser.");
                 });
@@ -257,7 +204,45 @@ loadCars();
             }
         }
 
-        // Prevent form refresh for demo
+        // 3. Dynamic Fleet Loading
+        async function loadCars() {
+            try {
+                // IMPORTANT: Relative URL for Render deployment
+                const response = await fetch('/api/cars'); 
+                const cars = await response.json();
+                const container = document.getElementById('fleet-container');
+                
+                container.innerHTML = cars.map(car => {
+                    const safeName = car.name.replace(/'/g, "\\'");
+                    const formattedPrice = Number(car.price).toLocaleString();
+
+                    // BACKTICKS (`) ARE CRUCIAL HERE
+                    return `
+                        <div class="bg-white rounded-3xl shadow p-5">
+                            <img 
+                                src="${car.image}" 
+                                alt="${car.name}" 
+                                class="w-full h-44 object-cover rounded-2xl mb-4"
+                            />
+                            <h4 class="font-bold text-lg text-gray-800">${car.name}</h4>
+                            <p class="text-blue-600 font-black text-2xl mt-1 mb-5">KSh ${formattedPrice}/day</p>
+                            <button 
+                                onclick="toggleModal(true, '${safeName}')" 
+                                class="w-full bg-gray-900 text-white py-3.5 rounded-2xl font-bold hover:bg-blue-600 transition">
+                                Book Now
+                            </button>
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error("Error loading cars:", error);
+            }
+        }
+
+        // Initialize Fleet
+        loadCars();
+
+        // 4. Booking Form Logic
         document.getElementById('finalBookingForm').onsubmit = (e) => {
             e.preventDefault();
             alert("Success! Account created and booking request sent for " + document.getElementById('carModel').value);
