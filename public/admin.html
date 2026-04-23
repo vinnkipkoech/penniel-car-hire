@@ -49,7 +49,7 @@
         <section class="bg-white rounded-3xl shadow-sm border border-gray-200 overflow-hidden">
             <div class="p-6 border-b border-gray-100 flex justify-between items-center">
                 <h3 class="font-bold text-lg">Current Fleet</h3>
-                <button onclick="alert('Open Add Car Form')" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-blue-700 transition">+ Add New Car</button>
+                <button onclick="toggleCarModal(true)" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-blue-700 transition">+ Add New Car</button>
             </div>
             <table class="w-full text-left">
                 <thead class="bg-gray-50 text-gray-400 text-xs uppercase font-bold">
@@ -85,7 +85,89 @@
                 </tbody>
             </table>
         </section>
+        <div id="carModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-8 max-w-md w-full">
+        <h3 class="text-2xl font-bold mb-6">Add New Vehicle</h3>
+        <form id="addCarForm" class="space-y-4">
+            <input type="text" id="carName" placeholder="Car Name (e.g. Mazda Demio)" class="w-full p-3 border rounded-xl" required>
+            <input type="number" id="carPrice" placeholder="Price per Day (KSh)" class="w-full p-3 border rounded-xl" required>
+            <select id="carCategory" class="w-full p-3 border rounded-xl">
+                <option value="Hatchback">Hatchback</option>
+                <option value="SUV">SUV</option>
+                <option value="Luxury">Luxury</option>
+            </select>
+            <input type="text" id="carImage" placeholder="Image URL" class="w-full p-3 border rounded-xl" required>
+            <div class="flex space-x-3 mt-6">
+                <button type="button" onclick="toggleCarModal(false)" class="flex-1 py-3 bg-gray-100 rounded-xl font-bold">Cancel</button>
+                <button type="submit" class="flex-1 py-3 bg-blue-600 text-white rounded-xl font-bold">Save Car</button>
+            </div>
+        </form>
+    </div>
+</div>
     </main>
 
+    <script>
+    const modal = document.getElementById('carModal');
+    const fleetTable = document.querySelector('tbody');
+
+    // 1. Toggle the Modal
+    function toggleCarModal(show) {
+        modal.classList.toggle('hidden', !show);
+    }
+
+    // 2. Load Cars from Database
+    async function loadAdminFleet() {
+        try {
+            const response = await fetch('/api/cars');
+            const cars = await response.json();
+            
+            fleetTable.innerHTML = cars.map(car => `
+                <tr>
+                    <td class="p-4 font-bold">${car.name}</td>
+                    <td class="p-4">${car.category}</td>
+                    <td class="p-4">KSh ${car.price.toLocaleString()}</td>
+                    <td class="p-4">
+                        <span class="${car.isAvailable ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'} px-3 py-1 rounded-full text-xs font-bold">
+                            ${car.isAvailable ? 'Available' : 'Rented'}
+                        </span>
+                    </td>
+                    <td class="p-4 text-center space-x-2">
+                        <button class="text-blue-500 hover:underline">Edit</button>
+                        <button class="text-red-500 hover:underline">Remove</button>
+                    </td>
+                </tr>
+            `).join('');
+        } catch (err) {
+            console.error("Failed to load fleet:", err);
+        }
+    }
+
+    // 3. Add New Car to Database
+    document.getElementById('addCarForm').onsubmit = async (e) => {
+        e.preventDefault();
+        
+        const carData = {
+            name: document.getElementById('carName').value,
+            price: document.getElementById('carPrice').value,
+            category: document.getElementById('carCategory').value,
+            image: document.getElementById('carImage').value
+        };
+
+        const response = await fetch('/api/admin/add-car', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(carData)
+        });
+
+        if (response.ok) {
+            alert("Vehicle added successfully!");
+            toggleCarModal(false);
+            loadAdminFleet(); // Refresh the list
+        }
+    };
+
+    // Initialize the dashboard
+    window.onload = loadAdminFleet;
+</script>
 </body>
 </html>
