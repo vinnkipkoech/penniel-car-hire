@@ -121,6 +121,11 @@
     </main>
 
     <script>
+    // 0. DYNAMIC API URL
+    const API_BASE = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost' 
+        ? 'http://localhost:5001' 
+        : '';
+
     // 1. Security Check
     const token = localStorage.getItem('adminToken');
     if (!token) { window.location.href = 'login.html'; }
@@ -132,12 +137,9 @@
 
     // 2. Tab Switcher Logic
     function showSection(sectionId) {
-        // Hide all views
         document.querySelectorAll('.admin-view').forEach(view => view.classList.remove('active'));
-        // Show selected view
         document.getElementById('section-' + sectionId).classList.add('active');
         
-        // Update Title
         const titles = {
             'dashboard': 'Dashboard Overview',
             'fleet': 'Manage Fleet',
@@ -146,9 +148,9 @@
         };
         document.getElementById('page-title').innerText = titles[sectionId];
 
-        // Update sidebar button styles
         document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('bg-blue-600', 'font-bold'));
-        document.getElementById('btn-' + sectionId).classList.add('bg-blue-600', 'font-bold');
+        const activeBtn = document.getElementById('btn-' + sectionId);
+        if (activeBtn) activeBtn.classList.add('bg-blue-600', 'font-bold');
     }
 
     const modal = document.getElementById('carModal');
@@ -158,10 +160,10 @@
         modal.classList.toggle('hidden', !show);
     }
 
-    // 3. Load Fleet
+    // 3. Load Fleet (Updated with API_BASE)
     async function loadAdminFleet() {
         try {
-            const response = await fetch('/api/cars');
+            const response = await fetch(`${API_BASE}/api/cars`);
             const cars = await response.json();
             
             fleetTableBody.innerHTML = cars.map(car => `
@@ -175,23 +177,33 @@
                         </span>
                     </td>
                     <td class="p-4 text-center space-x-2">
-                        <button class="text-blue-500 hover:underline">Edit</button>
-                        <button onclick="removeCar('${car._id}')" class="text-red-500 hover:underline">Remove</button>
+                        <button onclick="removeCar('${car._id}')" class="text-red-500 hover:underline font-bold">
+                            <i class="fas fa-trash-alt mr-1"></i> Remove
+                        </button>
                     </td>
                 </tr>
             `).join('');
-        } catch (err) { console.error("Failed to load fleet:", err); }
-    }
-
-    // 4. Remove Car
-    async function removeCar(id) {
-        if(confirm('Are you sure you want to remove this car?')) {
-            const res = await fetch(`/api/admin/cars/${id}`, { method: 'DELETE' });
-            if(res.ok) loadAdminFleet();
+        } catch (err) { 
+            console.error("Failed to load fleet:", err); 
+            fleetTableBody.innerHTML = `<tr><td colspan="5" class="p-10 text-center text-red-500">Error connecting to server.</td></tr>`;
         }
     }
 
-    // 5. Add Car
+    // 4. Remove Car (Updated with API_BASE)
+    async function removeCar(id) {
+        if(confirm('Are you sure you want to remove this car?')) {
+            try {
+                const res = await fetch(`${API_BASE}/api/admin/cars/${id}`, { method: 'DELETE' });
+                if(res.ok) {
+                    loadAdminFleet();
+                }
+            } catch (err) {
+                alert("Error deleting car. Check server connection.");
+            }
+        }
+    }
+
+    // 5. Add Car (Updated with API_BASE)
     document.getElementById('addCarForm').onsubmit = async (e) => {
         e.preventDefault();
         const carData = {
@@ -200,22 +212,28 @@
             category: document.getElementById('carCategory').value,
             image: document.getElementById('carImage').value
         };
-        const response = await fetch('/api/admin/add-car', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(carData)
-        });
-        if (response.ok) {
-            alert("Vehicle added successfully!");
-            toggleCarModal(false);
-            loadAdminFleet();
+        try {
+            const response = await fetch(`${API_BASE}/api/admin/add-car`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(carData)
+            });
+            if (response.ok) {
+                alert("Vehicle added successfully!");
+                e.target.reset();
+                toggleCarModal(false);
+                loadAdminFleet();
+            }
+        } catch (err) {
+            alert("Failed to save car. Check server.");
         }
     };
 
     window.onload = () => {
         loadAdminFleet();
-        showSection('dashboard'); // Start on dashboard
+        showSection('dashboard');
     };
     </script>
+    
 </body>
 </html>

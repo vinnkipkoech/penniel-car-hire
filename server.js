@@ -130,7 +130,7 @@ app.delete('/api/admin/cars/:id', async (req, res) => {
 });
 
 // 4. Start Server
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001; // Changed from 5000 to 5001
 app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
 });

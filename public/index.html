@@ -197,7 +197,7 @@
             </div>
         </div>
     </section>
-    
+
     <footer id="contact" class="bg-gray-900 text-white pt-20 pb-10 px-6">
         <div class="container mx-auto grid md:grid-cols-4 gap-12 border-b border-gray-800 pb-12">
             <div class="col-span-1">
@@ -227,7 +227,7 @@
     <script>
         // 0. API URL Logic (Fixes 404)
         const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-            ? 'http://localhost:5000'
+            ? 'http://localhost:5001' // Changed from 5000 to 5001 to match the new backend port
             : '';
 
         // 1. Modal Toggle
