@@ -71,6 +71,16 @@ app.post('/api/admin/add-car', async (req, res) => {
     }
 });
 
+// DELETE A CAR (Phase A)
+app.delete('/api/admin/cars/:id', async (req, res) => {
+    try {
+        await Car.findByIdAndDelete(req.params.id);
+        res.json({ message: "Car successfully removed from fleet" });
+    } catch (err) {
+        res.status(500).json({ error: "Failed to delete car" });
+    }
+});
+
 // 4. Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

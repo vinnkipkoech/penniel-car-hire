@@ -147,19 +147,38 @@
         </div>
     </section>
 
-    <section id="terms" class="bg-gray-100 py-20">
-        <div class="container mx-auto px-4">
-            <h3 class="text-3xl font-black text-center mb-10 uppercase text-gray-800">Terms & Conditions</h3>
-            <div class="max-w-4xl mx-auto bg-white p-8 rounded-3xl shadow-inner h-72 overflow-y-auto custom-scrollbar text-gray-600 leading-relaxed text-sm">
-                <h5 class="font-bold text-blue-600 mb-2 uppercase">1. Rental Duration</h5>
-                <p class="mb-4">Standard rentals are charged per 24-hour cycle. Any excess time over 2 hours is charged as a full day.</p>
-                <h5 class="font-bold text-blue-600 mb-2 uppercase">2. Fuel Policy</h5>
-                <p class="mb-4">Cars are provided with a full tank and must be returned with a full tank. Otherwise, a 15% refueling surcharge applies.</p>
+   <section id="faq" class="py-20 bg-gray-50">
+    <div class="max-w-4xl mx-auto px-6">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-black text-gray-900">Got Questions?</h2>
+            <p class="text-gray-500 mt-4 font-medium">Everything you need to know about renting with Penniel.</p>
+        </div>
+
+        <div class="space-y-6">
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+                <h4 class="font-bold text-xl text-blue-600">What do I need to rent a car?</h4>
+                <p class="text-gray-600 mt-3 leading-relaxed">
+                    You need a valid **National ID or Passport**, a valid **Driving License** (held for at least 2 years), and a 50% deposit to secure your booking.
+                </p>
+            </div>
+
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+                <h4 class="font-bold text-xl text-blue-600">Is insurance included?</h4>
+                <p class="text-gray-600 mt-3 leading-relaxed">
+                    Yes, all our vehicles come with **Comprehensive Insurance**. However, the hirer is liable for a standard excess fee in case of minor damages.
+                </p>
+            </div>
+
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+                <h4 class="font-bold text-xl text-blue-600">Can I drive outside of the city?</h4>
+                <p class="text-gray-600 mt-3 leading-relaxed">
+                    Our cars are allowed anywhere within Kenya. For cross-border travel (e.g., to Tanzania or Uganda), please contact us for special permits and rates.
+                </p>
             </div>
         </div>
-    </section>
-
-    <footer id="contact" class="bg-gray-900 text-white pt-20 pb-10 px-6">
+    </div>
+</section>
+     <footer id="contact" class="bg-gray-900 text-white pt-20 pb-10 px-6">
         <div class="container mx-auto grid md:grid-cols-4 gap-12 border-b border-gray-800 pb-12">
             <div class="col-span-1">
                 <h4 class="text-2xl font-black mb-4">PENNIEL <span class="text-blue-600">CAR HIRE</span></h4>
@@ -238,6 +257,26 @@
                 console.error("Error loading cars:", error);
             }
         }
+        
+        // SEARCH FILTER LOGIC
+const searchInput = document.querySelector('input[placeholder="Search"]');
+
+if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        // Assuming your car cards are inside a div with ID 'fleet-grid'
+        const carCards = document.querySelectorAll('#fleet-grid > div');
+
+        carCards.forEach(card => {
+            const carName = card.querySelector('h4').textContent.toLowerCase();
+            if (carName.includes(searchTerm)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+}
 
         // Initialize Fleet
         loadCars();
