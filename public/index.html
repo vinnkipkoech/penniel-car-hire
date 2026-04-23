@@ -178,12 +178,48 @@
         </div>
     </div>
 </section>
+<section id="terms" class="py-20 bg-white border-t border-gray-100">
+    <div class="max-w-4xl mx-auto px-6">
+        <div class="flex items-center gap-4 mb-10">
+            <div class="h-10 w-2 bg-blue-600 rounded-full"></div>
+            <h2 class="text-3xl font-black text-gray-900">Terms & Conditions</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-gray-600">
+            <div>
+                <h4 class="font-bold text-gray-900 mb-2 underline decoration-blue-500 underline-offset-4">1. Rental Requirements</h4>
+                <p class="text-sm leading-relaxed">Original ID/Passport and a valid Driving License must be presented. A refundable security deposit is mandatory for all self-drive rentals.</p>
+            </div>
+            <div>
+                <h4 class="font-bold text-gray-900 mb-2 underline decoration-blue-500 underline-offset-4">2. Usage & Limits</h4>
+                <p class="text-sm leading-relaxed">Our vehicles are fitted with GPS trackers. Off-road driving is prohibited unless the vehicle is a 4x4 (e.g., Land Cruiser or Prado).</p>
+            </div>
+            <div>
+                <h4 class="font-bold text-gray-900 mb-2 underline decoration-blue-500 underline-offset-4">3. Fuel & Cleaning</h4>
+                <p class="text-sm leading-relaxed">Return the car with the same fuel level as received. Smoking and pets are strictly prohibited inside the vehicles.</p>
+            </div>
+            <div>
+                <h4 class="font-bold text-gray-900 mb-2 underline decoration-blue-500 underline-offset-4">4. Breakdown & Accidents</h4>
+                <p class="text-sm leading-relaxed">In case of any incident, contact our 24/7 emergency line immediately. Do not attempt private repairs without authorization.</p>
+            </div>
+        </div>
+    </div>
+</section>
      <footer id="contact" class="bg-gray-900 text-white pt-20 pb-10 px-6">
         <div class="container mx-auto grid md:grid-cols-4 gap-12 border-b border-gray-800 pb-12">
             <div class="col-span-1">
                 <h4 class="text-2xl font-black mb-4">PENNIEL <span class="text-blue-600">CAR HIRE</span></h4>
                 <p class="text-gray-400 text-sm">Your reliable mobility partner in Kenya. We bridge the gap between quality and affordability.</p>
             </div>
+
+           <h4 class="font-bold mb-4 text-xs uppercase tracking-widest text-gray-500">Quick Links</h4>
+            <ul class="space-y-2 text-sm text-gray-400">
+                <li><a href="#faq" class="hover:text-blue-500 transition">FAQs</a></li>
+                <li><a href="#terms" class="hover:text-blue-500 transition">Terms & Conditions</a></li>
+                <li><a href="login.html" class="hover:text-blue-500 transition text-gray-600">Admin Login</a></li>
+            </ul>
+        </div> 
+        
             <div>
                 <h4 class="font-bold mb-4 text-xs uppercase tracking-widest text-gray-500">Reach Us</h4>
                 <p class="text-sm text-gray-400 mb-2">📍 Nairobi, Kenya</p>
@@ -257,7 +293,7 @@
                 console.error("Error loading cars:", error);
             }
         }
-        
+
         // SEARCH FILTER LOGIC
 const searchInput = document.querySelector('input[placeholder="Search"]');
 

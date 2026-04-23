@@ -107,6 +107,20 @@
     </main>
 
     <script>
+        // --- STEP 1: SECURITY BOUNCER (Add this at the very top) ---
+    const token = localStorage.getItem('adminToken');
+    if (!token) {
+        // If no token exists, redirect to login page immediately
+        window.location.href = 'login.html';
+    }
+
+    // Logout Function (Link this to your Logout button)
+    function logout() {
+        localStorage.removeItem('adminToken');
+        window.location.href = 'login.html';
+    }
+    // ---------------------------------------------------------
+    
     const modal = document.getElementById('carModal');
     const fleetTable = document.querySelector('tbody');
 

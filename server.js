@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const jwt = require('jsonwebtoken');
 
 // Load environment variables
 dotenv.config();
@@ -57,6 +58,21 @@ app.post('/api/register', async (req, res) => {
         res.status(201).json({ message: "Account created successfully" });
     } catch (err) {
         res.status(400).json({ error: "User already exists or data invalid" });
+    }
+});
+
+// ADMIN LOGIN ROUTE (Phase B)
+app.post('/api/admin/login', (req, res) => {
+    const { email, password } = req.body;
+
+    // FOR NOW: Hardcoded credentials for your project demo
+    // In a real app, you would check these in MongoDB
+    if (email === "admin@penniel.com" && password === "penniel2026") {
+        // Create the Token (The "Pass")
+        const token = jwt.sign({ role: 'admin' }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        res.json({ success: true, token });
+    } else {
+        res.status(401).json({ success: false, message: "Invalid credentials" });
     }
 });
 
