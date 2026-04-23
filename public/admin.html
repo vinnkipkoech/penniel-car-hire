@@ -6,47 +6,64 @@
     <title>Admin Dashboard | Penniel Car Hire</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .admin-view { display: none; }
+        .admin-view.active { display: block; }
+    </style>
 </head>
 <body class="bg-gray-100 flex">
 
     <aside class="w-64 bg-gray-900 min-h-screen text-white p-6 hidden md:block">
         <h1 class="text-xl font-bold mb-10">PENNIEL <span class="text-blue-500">ADMIN</span></h1>
         <nav class="space-y-4">
-            <a href="#" class="block p-3 rounded bg-blue-600 font-bold"><i class="fas fa-chart-line mr-2"></i> Dashboard</a>
-            <a href="#" class="block p-3 rounded hover:bg-gray-800 transition"><i class="fas fa-car mr-2"></i> Manage Fleet</a>
-            <a href="#" class="block p-3 rounded hover:bg-gray-800 transition"><i class="fas fa-calendar-check mr-2"></i> Bookings</a>
-            <a href="#" class="block p-3 rounded hover:bg-gray-800 transition"><i class="fas fa-users mr-2"></i> Customers</a>
+            <button onclick="showSection('dashboard')" class="w-full text-left p-3 rounded hover:bg-gray-800 transition active-nav" id="btn-dashboard">
+                <i class="fas fa-chart-line mr-2"></i> Dashboard
+            </button>
+            <button onclick="showSection('fleet')" class="w-full text-left p-3 rounded hover:bg-gray-800 transition" id="btn-fleet">
+                <i class="fas fa-car mr-2"></i> Manage Fleet
+            </button>
+            <button onclick="showSection('bookings')" class="w-full text-left p-3 rounded hover:bg-gray-800 transition" id="btn-bookings">
+                <i class="fas fa-calendar-check mr-2"></i> Bookings
+            </button>
+            <button onclick="showSection('customers')" class="w-full text-left p-3 rounded hover:bg-gray-800 transition" id="btn-customers">
+                <i class="fas fa-users mr-2"></i> Customers
+            </button>
             <div class="pt-10">
                 <a href="index.html" class="block p-3 text-gray-400 hover:text-white"><i class="fas fa-external-link-alt mr-2"></i> View Website</a>
+                <button onclick="logout()" class="block w-full text-left p-3 text-red-400 hover:text-red-500 mt-4">
+                    <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                </button>
             </div>
         </nav>
     </aside>
 
     <main class="flex-1 p-8">
         <header class="flex justify-between items-center mb-10">
-            <h2 class="text-3xl font-black text-gray-800">Overview</h2>
+            <h2 id="page-title" class="text-3xl font-black text-gray-800">Dashboard Overview</h2>
             <div class="flex items-center space-x-4">
                 <span class="text-sm font-bold text-gray-500">Welcome, Admin</span>
                 <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">VK</div>
             </div>
         </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
-                <p class="text-gray-400 text-sm font-bold uppercase">Total Bookings</p>
-                <h3 class="text-3xl font-black mt-1">124</h3>
-            </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
-                <p class="text-gray-400 text-sm font-bold uppercase">Active Rentals</p>
-                <h3 class="text-3xl font-black mt-1 text-blue-600">12</h3>
-            </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
-                <p class="text-gray-400 text-sm font-bold uppercase">Revenue (KES)</p>
-                <h3 class="text-3xl font-black mt-1 text-green-600">450k</h3>
+        <div id="section-dashboard" class="admin-view active">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                    <p class="text-gray-400 text-sm font-bold uppercase">Total Bookings</p>
+                    <h3 class="text-3xl font-black mt-1">124</h3>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                    <p class="text-gray-400 text-sm font-bold uppercase">Active Rentals</p>
+                    <h3 class="text-3xl font-black mt-1 text-blue-600">12</h3>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                    <p class="text-gray-400 text-sm font-bold uppercase">Revenue (KES)</p>
+                    <h3 class="text-3xl font-black mt-1 text-green-600">450k</h3>
+                </div>
             </div>
         </div>
 
-        <section class="bg-white rounded-3xl shadow-sm border border-gray-200 overflow-hidden">
+        <section id="section-fleet" class="admin-view bg-white rounded-3xl shadow-sm border border-gray-200 overflow-hidden">
             <div class="p-6 border-b border-gray-100 flex justify-between items-center">
                 <h3 class="font-bold text-lg">Current Fleet</h3>
                 <button onclick="toggleCarModal(true)" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-blue-700 transition">+ Add New Car</button>
@@ -61,81 +78,93 @@
                         <th class="p-4 text-center">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-100 text-sm">
-                    <tr>
-                        <td class="p-4 font-bold">Toyota Prado TX</td>
-                        <td class="p-4">SUV</td>
-                        <td class="p-4">KSh 15,000</td>
-                        <td class="p-4"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">Available</span></td>
-                        <td class="p-4 text-center space-x-2">
-                            <button class="text-blue-500 hover:underline">Edit</button>
-                            <button class="text-red-500 hover:underline">Remove</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="p-4 font-bold">Mazda CX-5</td>
-                        <td class="p-4">Crossover</td>
-                        <td class="p-4">KSh 6,500</td>
-                        <td class="p-4"><span class="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-xs font-bold">Rented</span></td>
-                        <td class="p-4 text-center space-x-2">
-                            <button class="text-blue-500 hover:underline">Edit</button>
-                            <button class="text-red-500 hover:underline">Remove</button>
-                        </td>
-                    </tr>
-                </tbody>
+                <tbody class="divide-y divide-gray-100 text-sm" id="fleet-body">
+                    </tbody>
             </table>
         </section>
-        <div id="carModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-8 max-w-md w-full">
-        <h3 class="text-2xl font-bold mb-6">Add New Vehicle</h3>
-        <form id="addCarForm" class="space-y-4">
-            <input type="text" id="carName" placeholder="Car Name (e.g. Mazda Demio)" class="w-full p-3 border rounded-xl" required>
-            <input type="number" id="carPrice" placeholder="Price per Day (KSh)" class="w-full p-3 border rounded-xl" required>
-            <select id="carCategory" class="w-full p-3 border rounded-xl">
-                <option value="Hatchback">Hatchback</option>
-                <option value="SUV">SUV</option>
-                <option value="Luxury">Luxury</option>
-            </select>
-            <input type="text" id="carImage" placeholder="Image URL" class="w-full p-3 border rounded-xl" required>
-            <div class="flex space-x-3 mt-6">
-                <button type="button" onclick="toggleCarModal(false)" class="flex-1 py-3 bg-gray-100 rounded-xl font-bold">Cancel</button>
-                <button type="submit" class="flex-1 py-3 bg-blue-600 text-white rounded-xl font-bold">Save Car</button>
+
+        <section id="section-bookings" class="admin-view">
+            <div class="bg-white p-12 rounded-3xl text-center border-2 border-dashed border-gray-200">
+                <i class="fas fa-calendar-check text-5xl text-gray-200 mb-4"></i>
+                <h3 class="text-xl font-bold text-gray-800">Booking Management</h3>
+                <p class="text-gray-500">Feature arriving in Phase 2: Integrated Booking System.</p>
             </div>
-        </form>
-    </div>
-</div>
+        </section>
+
+        <section id="section-customers" class="admin-view">
+            <div class="bg-white p-12 rounded-3xl text-center border-2 border-dashed border-gray-200">
+                <i class="fas fa-users text-5xl text-gray-200 mb-4"></i>
+                <h3 class="text-xl font-bold text-gray-800">Customer Records</h3>
+                <p class="text-gray-500">Database of registered clients will be displayed here.</p>
+            </div>
+        </section>
+
+        <div id="carModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div class="bg-white rounded-3xl p-8 max-w-md w-full">
+                <h3 class="text-2xl font-bold mb-6">Add New Vehicle</h3>
+                <form id="addCarForm" class="space-y-4">
+                    <input type="text" id="carName" placeholder="Car Name (e.g. Mazda Demio)" class="w-full p-3 border rounded-xl" required>
+                    <input type="number" id="carPrice" placeholder="Price per Day (KSh)" class="w-full p-3 border rounded-xl" required>
+                    <select id="carCategory" class="w-full p-3 border rounded-xl">
+                        <option value="Hatchback">Hatchback</option>
+                        <option value="SUV">SUV</option>
+                        <option value="Luxury">Luxury</option>
+                    </select>
+                    <input type="text" id="carImage" placeholder="Image URL" class="w-full p-3 border rounded-xl" required>
+                    <div class="flex space-x-3 mt-6">
+                        <button type="button" onclick="toggleCarModal(false)" class="flex-1 py-3 bg-gray-100 rounded-xl font-bold">Cancel</button>
+                        <button type="submit" class="flex-1 py-3 bg-blue-600 text-white rounded-xl font-bold">Save Car</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </main>
 
     <script>
-        // --- STEP 1: SECURITY BOUNCER (Add this at the very top) ---
+    // 1. Security Check
     const token = localStorage.getItem('adminToken');
-    if (!token) {
-        // If no token exists, redirect to login page immediately
-        window.location.href = 'login.html';
-    }
+    if (!token) { window.location.href = 'login.html'; }
 
-    // Logout Function (Link this to your Logout button)
     function logout() {
         localStorage.removeItem('adminToken');
         window.location.href = 'login.html';
     }
-    // ---------------------------------------------------------
-    
-    const modal = document.getElementById('carModal');
-    const fleetTable = document.querySelector('tbody');
 
-    // 1. Toggle the Modal
+    // 2. Tab Switcher Logic
+    function showSection(sectionId) {
+        // Hide all views
+        document.querySelectorAll('.admin-view').forEach(view => view.classList.remove('active'));
+        // Show selected view
+        document.getElementById('section-' + sectionId).classList.add('active');
+        
+        // Update Title
+        const titles = {
+            'dashboard': 'Dashboard Overview',
+            'fleet': 'Manage Fleet',
+            'bookings': 'Customer Bookings',
+            'customers': 'Registered Customers'
+        };
+        document.getElementById('page-title').innerText = titles[sectionId];
+
+        // Update sidebar button styles
+        document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('bg-blue-600', 'font-bold'));
+        document.getElementById('btn-' + sectionId).classList.add('bg-blue-600', 'font-bold');
+    }
+
+    const modal = document.getElementById('carModal');
+    const fleetTableBody = document.getElementById('fleet-body');
+
     function toggleCarModal(show) {
         modal.classList.toggle('hidden', !show);
     }
 
-    // 2. Load Cars from Database
+    // 3. Load Fleet
     async function loadAdminFleet() {
         try {
             const response = await fetch('/api/cars');
             const cars = await response.json();
             
-            fleetTable.innerHTML = cars.map(car => `
+            fleetTableBody.innerHTML = cars.map(car => `
                 <tr>
                     <td class="p-4 font-bold">${car.name}</td>
                     <td class="p-4">${car.category}</td>
@@ -147,41 +176,46 @@
                     </td>
                     <td class="p-4 text-center space-x-2">
                         <button class="text-blue-500 hover:underline">Edit</button>
-                        <button class="text-red-500 hover:underline">Remove</button>
+                        <button onclick="removeCar('${car._id}')" class="text-red-500 hover:underline">Remove</button>
                     </td>
                 </tr>
             `).join('');
-        } catch (err) {
-            console.error("Failed to load fleet:", err);
+        } catch (err) { console.error("Failed to load fleet:", err); }
+    }
+
+    // 4. Remove Car
+    async function removeCar(id) {
+        if(confirm('Are you sure you want to remove this car?')) {
+            const res = await fetch(`/api/admin/cars/${id}`, { method: 'DELETE' });
+            if(res.ok) loadAdminFleet();
         }
     }
 
-    // 3. Add New Car to Database
+    // 5. Add Car
     document.getElementById('addCarForm').onsubmit = async (e) => {
         e.preventDefault();
-        
         const carData = {
             name: document.getElementById('carName').value,
             price: document.getElementById('carPrice').value,
             category: document.getElementById('carCategory').value,
             image: document.getElementById('carImage').value
         };
-
         const response = await fetch('/api/admin/add-car', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(carData)
         });
-
         if (response.ok) {
             alert("Vehicle added successfully!");
             toggleCarModal(false);
-            loadAdminFleet(); // Refresh the list
+            loadAdminFleet();
         }
     };
 
-    // Initialize the dashboard
-    window.onload = loadAdminFleet;
-</script>
+    window.onload = () => {
+        loadAdminFleet();
+        showSection('dashboard'); // Start on dashboard
+    };
+    </script>
 </body>
 </html>

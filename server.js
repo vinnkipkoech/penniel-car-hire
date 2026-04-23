@@ -12,15 +12,15 @@ const app = express();
 
 // Middleware
 app.use(cors());
-app.use(express.json()); // Allows the server to read JSON from the frontend
-app.use(express.static('public')); // Serves your HTML/CSS files from a 'public' folder
+app.use(express.json()); 
+app.use(express.static('public')); 
 
 // 1. Database Connection
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('✅ Connected to MongoDB Atlas'))
     .catch((err) => console.error('❌ Database connection error:', err));
 
-// 2. Import Models (Internal definitions for this example)
+// 2. Models
 const Car = mongoose.model('Car', new mongoose.Schema({
     name: String,
     price: Number,
@@ -52,31 +52,47 @@ app.get('/api/cars', async (req, res) => {
 app.post('/api/register', async (req, res) => {
     try {
         const { fullName, email, password } = req.body;
-        // In Phase 3, you'd hash the password here using bcrypt
         const newUser = new User({ fullName, email, password });
         await newUser.save();
-        res.status(201).json({ message: "Account created successfully" });
+        res.status(201).json({ success: true, message: "Account created successfully" });
     } catch (err) {
-        res.status(400).json({ error: "User already exists or data invalid" });
+        res.status(400).json({ success: false, error: "User already exists or data invalid" });
     }
 });
 
-// ADMIN LOGIN ROUTE (Phase B)
-app.post('/api/admin/login', (req, res) => {
+// --- UPDATED LOGIN ROUTE (Handles BOTH Admin and Client) ---
+app.post('/api/login', async (req, res) => {
     const { email, password } = req.body;
 
-    // FOR NOW: Hardcoded credentials for your project demo
-    // In a real app, you would check these in MongoDB
-    if (email === "admin@penniel.com" && password === "penniel2026") {
-        // Create the Token (The "Pass")
-        const token = jwt.sign({ role: 'admin' }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.json({ success: true, token });
-    } else {
-        res.status(401).json({ success: false, message: "Invalid credentials" });
+    try {
+        // A. Check for Admin First (Hardcoded for Demo)
+        if (email === "admin@penniel.com" && password === "penniel2026") {
+            const token = jwt.sign({ role: 'admin' }, process.env.JWT_SECRET, { expiresIn: '1h' });
+            return res.json({ success: true, token, role: 'admin' });
+        }
+
+        // B. Check MongoDB for regular clients
+        const user = await User.findOne({ email, password });
+        
+        if (user) {
+            const token = jwt.sign({ id: user._id, role: 'user' }, process.env.JWT_SECRET, { expiresIn: '1h' });
+            return res.json({ 
+                success: true, 
+                token, 
+                role: 'user', 
+                name: user.fullName 
+            });
+        }
+
+        // C. If neither matches
+        res.status(401).json({ success: false, message: "Invalid email or password" });
+
+    } catch (err) {
+        res.status(500).json({ success: false, message: "Server error during login" });
     }
 });
 
-// ADMIN: Add a new car (from Admin Dashboard)
+// ADMIN: Add a new car
 app.post('/api/admin/add-car', async (req, res) => {
     try {
         const newCar = new Car(req.body);
@@ -87,7 +103,7 @@ app.post('/api/admin/add-car', async (req, res) => {
     }
 });
 
-// DELETE A CAR (Phase A)
+// DELETE A CAR
 app.delete('/api/admin/cars/:id', async (req, res) => {
     try {
         await Car.findByIdAndDelete(req.params.id);
@@ -100,5 +116,5 @@ app.delete('/api/admin/cars/:id', async (req, res) => {
 // 4. Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
+    console.log(`🚀 Server running on port ${PORT}`);
 });
