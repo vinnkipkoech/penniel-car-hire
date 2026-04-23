@@ -8,33 +8,25 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         html { scroll-behavior: smooth; }
-        
         .hero-bg {
             background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
                               url('https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&q=80&w=1920');
             background-size: cover;
             background-position: center;
         }
-
         .whatsapp-float {
             position: fixed;
             bottom: 25px;
             right: 25px;
             background-color: #25d366;
             color: white;
-            width: 60px;
-            height: 60px;
+            width: 60px; height: 60px;
             border-radius: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            box-shadow: 2px 4px 15px rgba(0,0,0,0.3);
-            z-index: 1000;
-            transition: all 0.3s ease;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 32px; box-shadow: 2px 4px 15px rgba(0,0,0,0.3);
+            z-index: 1000; transition: all 0.3s ease;
         }
         .whatsapp-float:hover { transform: scale(1.1); background-color: #128c7e; }
-
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
@@ -60,12 +52,12 @@
                     </div>
                     <div>
                         <label class="text-[10px] font-bold uppercase text-gray-400">Full Name</label>
-                        <input type="text" required class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Enter Full Name">
+                        <input type="text" id="regName" required class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Enter Full Name">
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input type="email" placeholder="Email Address" required class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                    <input type="email" id="regEmail" placeholder="Email Address" required class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
                     <input type="tel" placeholder="Phone Number (e.g. 07...)" required class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
                 
@@ -76,21 +68,8 @@
                     <div><label class="text-[10px] font-bold uppercase text-gray-400">Time</label><input type="time" required class="w-full p-2 border rounded-lg text-sm outline-none"></div>
                 </div>
 
-                <div>
-                    <label class="text-[10px] font-bold uppercase text-gray-400">Location Details</label>
-                    <div class="flex gap-2">
-                        <select class="p-3 border rounded-xl bg-white text-sm outline-none">
-                            <option>Office Pickup</option>
-                            <option>JKIA / Wilson Airport</option>
-                            <option>Home/Hotel Delivery</option>
-                        </select>
-                        <input type="text" id="pickupLoc" placeholder="Specific Landmark or Live Location" required class="w-full p-3 border rounded-xl outline-none">
-                        <button type="button" onclick="getLiveLocation()" class="bg-blue-100 text-blue-600 px-4 rounded-xl hover:bg-blue-200 transition" title="Get Live Location">📍</button>
-                    </div>
-                </div>
-
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t">
-                    <input type="password" placeholder="Create Password" required class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                    <input type="password" id="regPassword" placeholder="Create Password" required class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
                     <input type="password" placeholder="Confirm Password" required class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
                 
@@ -110,14 +89,13 @@
             <a href="#terms" class="hover:text-blue-600">Terms</a>
             <a href="#contact" class="hover:text-blue-600">Contact</a>
         </div>
-        <button class="bg-gray-100 text-gray-800 px-6 py-2 rounded-full font-bold text-xs uppercase hover:bg-gray-200 transition">Client Login</button>
+        <a href="login.html" id="navLoginBtn" class="bg-gray-100 text-gray-800 px-6 py-2 rounded-full font-bold text-xs uppercase hover:bg-gray-200 transition">Client Login</a>
     </nav>
 
     <section id="home" class="hero-bg min-h-[80vh] flex flex-col items-center justify-center text-white text-center px-4">
         <div class="max-w-4xl">
             <span class="uppercase tracking-[0.3em] text-blue-400 font-bold mb-4 block">Nairobi's Premier Rentals</span>
             <h2 class="text-5xl md:text-7xl font-black mb-6 leading-tight">Your Satisfaction <br><span class="text-blue-500">Our Priority</span></h2>
-            <p class="text-lg md:text-xl mb-10 text-gray-300 max-w-2xl mx-auto">Providing quality vehicles and seamless experiences since 2024.</p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
                 <a href="#fleet" class="bg-blue-600 px-10 py-4 rounded-full font-bold hover:bg-blue-700 shadow-xl transition transform hover:scale-105">View Fleet</a>
                 <a href="https://wa.me/254700000000" class="bg-white/10 backdrop-blur border border-white/30 px-10 py-4 rounded-full font-bold hover:bg-white hover:text-gray-900 transition-all">Quick Inquiry</a>
@@ -126,100 +104,34 @@
     </section>
 
     <section id="fleet" class="container mx-auto py-20 px-4">
-        <div class="text-center mb-16">
+        <div class="text-center mb-12">
             <h3 class="text-4xl font-black text-gray-900 mb-2 uppercase">Our Available Fleet</h3>
-            <div class="h-1.5 w-24 bg-blue-600 mx-auto rounded-full"></div>
+            <div class="h-1.5 w-24 bg-blue-600 mx-auto rounded-full mb-8"></div>
+            
+            <div class="max-w-md mx-auto relative">
+                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                <input type="text" id="carSearch" placeholder="Search by name (e.g. Toyota)..." 
+                class="w-full pl-12 pr-4 py-4 rounded-2xl border border-gray-200 shadow-sm focus:ring-2 focus:ring-blue-500 outline-none">
+            </div>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8" id="fleet-container"></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8" id="fleet-container">
+            </div>
     </section>
 
-    <section id="faq" class="py-20 container mx-auto px-4 max-w-4xl">
-        <h3 class="text-3xl font-black text-center mb-12 uppercase">Frequently Asked Questions</h3>
-        <div class="space-y-4">
-            <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-blue-600">
-                <h4 class="font-bold text-gray-800">What are the requirements for self-drive?</h4>
-                <p class="text-gray-600 mt-2">A valid National ID/Passport, a valid Driving License (min 2 years experience), and a refundable security deposit.</p>
-            </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-blue-600">
-                <h4 class="font-bold text-gray-800">Do you offer chauffeur-driven services?</h4>
-                <p class="text-gray-600 mt-2">Yes. Professional drivers are available for KSh 2,500/day (Nairobi) and KSh 3,500/day (Outside Nairobi).</p>
-            </div>
-        </div>
-    </section>
-
-   <section id="faq" class="py-20 bg-gray-50">
-    <div class="max-w-4xl mx-auto px-6">
-        <div class="text-center mb-16">
-            <h2 class="text-4xl font-black text-gray-900">Got Questions?</h2>
-            <p class="text-gray-500 mt-4 font-medium">Everything you need to know about renting with Penniel.</p>
-        </div>
-
-        <div class="space-y-6">
-            <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
-                <h4 class="font-bold text-xl text-blue-600">What do I need to rent a car?</h4>
-                <p class="text-gray-600 mt-3 leading-relaxed">
-                    You need a valid **National ID or Passport**, a valid **Driving License** (held for at least 2 years), and a 50% deposit to secure your booking.
-                </p>
-            </div>
-
-            <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
-                <h4 class="font-bold text-xl text-blue-600">Is insurance included?</h4>
-                <p class="text-gray-600 mt-3 leading-relaxed">
-                    Yes, all our vehicles come with **Comprehensive Insurance**. However, the hirer is liable for a standard excess fee in case of minor damages.
-                </p>
-            </div>
-
-            <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
-                <h4 class="font-bold text-xl text-blue-600">Can I drive outside of the city?</h4>
-                <p class="text-gray-600 mt-3 leading-relaxed">
-                    Our cars are allowed anywhere within Kenya. For cross-border travel (e.g., to Tanzania or Uganda), please contact us for special permits and rates.
-                </p>
-            </div>
-        </div>
-    </div>
-</section>
-<section id="terms" class="py-20 bg-white border-t border-gray-100">
-    <div class="max-w-4xl mx-auto px-6">
-        <div class="flex items-center gap-4 mb-10">
-            <div class="h-10 w-2 bg-blue-600 rounded-full"></div>
-            <h2 class="text-3xl font-black text-gray-900">Terms & Conditions</h2>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-gray-600">
-            <div>
-                <h4 class="font-bold text-gray-900 mb-2 underline decoration-blue-500 underline-offset-4">1. Rental Requirements</h4>
-                <p class="text-sm leading-relaxed">Original ID/Passport and a valid Driving License must be presented. A refundable security deposit is mandatory for all self-drive rentals.</p>
-            </div>
-            <div>
-                <h4 class="font-bold text-gray-900 mb-2 underline decoration-blue-500 underline-offset-4">2. Usage & Limits</h4>
-                <p class="text-sm leading-relaxed">Our vehicles are fitted with GPS trackers. Off-road driving is prohibited unless the vehicle is a 4x4 (e.g., Land Cruiser or Prado).</p>
-            </div>
-            <div>
-                <h4 class="font-bold text-gray-900 mb-2 underline decoration-blue-500 underline-offset-4">3. Fuel & Cleaning</h4>
-                <p class="text-sm leading-relaxed">Return the car with the same fuel level as received. Smoking and pets are strictly prohibited inside the vehicles.</p>
-            </div>
-            <div>
-                <h4 class="font-bold text-gray-900 mb-2 underline decoration-blue-500 underline-offset-4">4. Breakdown & Accidents</h4>
-                <p class="text-sm leading-relaxed">In case of any incident, contact our 24/7 emergency line immediately. Do not attempt private repairs without authorization.</p>
-            </div>
-        </div>
-    </div>
-</section>
-     <footer id="contact" class="bg-gray-900 text-white pt-20 pb-10 px-6">
+    <footer id="contact" class="bg-gray-900 text-white pt-20 pb-10 px-6">
         <div class="container mx-auto grid md:grid-cols-4 gap-12 border-b border-gray-800 pb-12">
             <div class="col-span-1">
                 <h4 class="text-2xl font-black mb-4">PENNIEL <span class="text-blue-600">CAR HIRE</span></h4>
-                <p class="text-gray-400 text-sm">Your reliable mobility partner in Kenya. We bridge the gap between quality and affordability.</p>
+                <p class="text-gray-400 text-sm">Your reliable mobility partner in Kenya.</p>
             </div>
-
-           <h4 class="font-bold mb-4 text-xs uppercase tracking-widest text-gray-500">Quick Links</h4>
-            <ul class="space-y-2 text-sm text-gray-400">
-                <li><a href="#faq" class="hover:text-blue-500 transition">FAQs</a></li>
-                <li><a href="#terms" class="hover:text-blue-500 transition">Terms & Conditions</a></li>
-                <li><a href="login.html" class="hover:text-blue-500 transition text-gray-600">Admin Login</a></li>
-            </ul>
-        </div> 
-        
+            <div>
+                <h4 class="font-bold mb-4 text-xs uppercase tracking-widest text-gray-500">Quick Links</h4>
+                <ul class="space-y-2 text-sm text-gray-400">
+                    <li><a href="#faq" class="hover:text-blue-500 transition">FAQs</a></li>
+                    <li><a href="#terms" class="hover:text-blue-500 transition">Terms & Conditions</a></li>
+                    <li><a href="login.html" class="hover:text-blue-500 transition text-gray-600 italic">Admin Login</a></li>
+                </ul>
+            </div>
             <div>
                 <h4 class="font-bold mb-4 text-xs uppercase tracking-widest text-gray-500">Reach Us</h4>
                 <p class="text-sm text-gray-400 mb-2">📍 Nairobi, Kenya</p>
@@ -233,7 +145,12 @@
     </footer>
 
     <script>
-        // 1. Modal Logic
+        // 0. API URL Logic (Fixes 404)
+        const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:5000'
+            : '';
+
+        // 1. Modal Toggle
         function toggleModal(show, carName = '') {
             const modal = document.getElementById('bookingModal');
             if(show) {
@@ -246,82 +163,67 @@
             }
         }
 
-        // 2. Geolocation
-        function getLiveLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition((position) => {
-                    document.getElementById('pickupLoc').value = `Lat: ${position.coords.latitude.toFixed(4)}, Lon: ${position.coords.longitude.toFixed(4)}`;
-                }, (error) => {
-                    alert("Please enable location permissions in your browser.");
-                });
-            } else {
-                alert("Geolocation is not supported by your browser.");
-            }
-        }
-
-        // 3. Dynamic Fleet Loading
+        // 2. Load Fleet
         async function loadCars() {
             try {
-                // IMPORTANT: Relative URL for Render deployment
-                const response = await fetch('/api/cars'); 
+                const response = await fetch(`${API_BASE}/api/cars`);
                 const cars = await response.json();
                 const container = document.getElementById('fleet-container');
                 
-                container.innerHTML = cars.map(car => {
-                    const safeName = car.name.replace(/'/g, "\\'");
-                    const formattedPrice = Number(car.price).toLocaleString();
-
-                    // BACKTICKS (`) ARE CRUCIAL HERE
-                    return `
-                        <div class="bg-white rounded-3xl shadow p-5">
-                            <img 
-                                src="${car.image}" 
-                                alt="${car.name}" 
-                                class="w-full h-44 object-cover rounded-2xl mb-4"
-                            />
-                            <h4 class="font-bold text-lg text-gray-800">${car.name}</h4>
-                            <p class="text-blue-600 font-black text-2xl mt-1 mb-5">KSh ${formattedPrice}/day</p>
-                            <button 
-                                onclick="toggleModal(true, '${safeName}')" 
+                container.innerHTML = cars.map(car => `
+                    <div class="bg-white rounded-3xl shadow p-5 car-card">
+                        <img src="${car.image}" class="w-full h-44 object-cover rounded-2xl mb-4" />
+                        <h4 class="font-bold text-lg text-gray-800">${car.name}</h4>
+                        <p class="text-blue-600 font-black text-2xl mt-1 mb-5">KSh ${car.price.toLocaleString()}/day</p>
+                        <button onclick="toggleModal(true, '${car.name}')" 
                                 class="w-full bg-gray-900 text-white py-3.5 rounded-2xl font-bold hover:bg-blue-600 transition">
-                                Book Now
-                            </button>
-                        </div>
-                    `;
-                }).join('');
-            } catch (error) {
-                console.error("Error loading cars:", error);
-            }
+                            Book Now
+                        </button>
+                    </div>
+                `).join('');
+            } catch (error) { console.error("Error:", error); }
         }
 
-        // SEARCH FILTER LOGIC
-const searchInput = document.querySelector('input[placeholder="Search"]');
-
-if (searchInput) {
-    searchInput.addEventListener('input', (e) => {
-        const searchTerm = e.target.value.toLowerCase();
-        // Assuming your car cards are inside a div with ID 'fleet-grid'
-        const carCards = document.querySelectorAll('#fleet-grid > div');
-
-        carCards.forEach(card => {
-            const carName = card.querySelector('h4').textContent.toLowerCase();
-            if (carName.includes(searchTerm)) {
-                card.style.display = 'block';
-            } else {
-                card.style.display = 'none';
-            }
+        // 3. Search Logic
+        document.getElementById('carSearch').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            document.querySelectorAll('.car-card').forEach(card => {
+                const name = card.querySelector('h4').textContent.toLowerCase();
+                card.style.display = name.includes(term) ? 'block' : 'none';
+            });
         });
-    });
-}
 
-        // Initialize Fleet
-        loadCars();
-
-        // 4. Booking Form Logic
-        document.getElementById('finalBookingForm').onsubmit = (e) => {
+        // 4. Registration & Booking Logic
+        document.getElementById('finalBookingForm').onsubmit = async (e) => {
             e.preventDefault();
-            alert("Success! Account created and booking request sent for " + document.getElementById('carModel').value);
-            toggleModal(false);
+            const payload = {
+                fullName: document.getElementById('regName').value,
+                email: document.getElementById('regEmail').value,
+                password: document.getElementById('regPassword').value
+            };
+
+            try {
+                const res = await fetch(`${API_BASE}/api/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if(data.success) {
+                    alert("Account created! Redirecting to login...");
+                    window.location.href = 'login.html';
+                } else { alert("Registration failed: " + data.error); }
+            } catch (err) { alert("Server error. Is your backend running?"); }
+        };
+
+        // 5. Auth Check (Changes Login button if already logged in)
+        window.onload = () => {
+            loadCars();
+            if(localStorage.getItem('adminToken')) {
+                const btn = document.getElementById('navLoginBtn');
+                btn.innerText = "Dashboard";
+                btn.href = "admin.html"; // Or a specific client dashboard if you make one
+            }
         };
     </script>
 </body>

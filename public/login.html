@@ -32,43 +32,54 @@
     </div>
 
     <script>
-        document.getElementById('loginForm').onsubmit = async (e) => {
-            e.preventDefault();
-            
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+       document.getElementById('loginForm').onsubmit = async (e) => {
+        e.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
 
-            try {
-                // We use the general login route we added to server.js
-                const response = await fetch('/api/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
+        // DYNAMIC API URL:
+        // If we are on localhost, talk to port 5000. 
+        // If we are on Render, use the relative path.
+        const API_BASE = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost' 
+            ? 'http://localhost:5000' 
+            : '';
 
-                const data = await response.json();
+        try {
+            const response = await fetch(`${API_BASE}/api/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
 
-                if (data.success) {
-                    // 1. Save the Token (Used for both Admin and Client)
-                    localStorage.setItem('adminToken', data.token);
-                    
-                    // 2. Role-Based Redirection
-                    if (data.role === 'admin') {
-                        // Admins go to the Dashboard
-                        window.location.href = 'admin.html';
-                    } else {
-                        // Regular Clients go to the Homepage
-                        alert("Welcome back, " + (data.name || "Customer") + "!");
-                        window.location.href = 'index.html';
-                    }
-                } else {
-                    alert("Login Failed: " + data.message);
-                }
-            } catch (err) {
-                alert("Server error. Make sure your backend is running!");
-                console.error(err);
+            // This handles the "SyntaxError: Unexpected token <" 
+            // by checking if the response is actually JSON
+            const contentType = response.headers.get("content-type");
+            if (!contentType || !contentType.includes("application/json")) {
+                throw new TypeError("Oops, the server didn't send back JSON. Is the backend running on port 5000?");
             }
-        };
+
+            const data = await response.json();
+
+            if (data.success) {
+                // Store the token
+                localStorage.setItem('adminToken', data.token);
+                
+                // Redirection Logic
+                if (data.role === 'admin') {
+                    window.location.href = 'admin.html';
+                } else {
+                    alert("Welcome back, " + (data.name || "Customer") + "!");
+                    window.location.href = 'index.html';
+                }
+            } else {
+                alert("Login Failed: " + data.message);
+            }
+        } catch (err) {
+            alert(err.message || "Server error. Make sure your backend is running!");
+            console.error("Login Error:", err);
+        }
+    };
     </script>
 </body>
 </html>
