@@ -221,7 +221,10 @@
         try {
             const response = await fetch(`${API_BASE}/api/admin/add-car`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json',
+                    // THIS LINE IS CRITICAL:
+        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+                 },
                 body: JSON.stringify(carData)
             });
             if (response.ok) {
