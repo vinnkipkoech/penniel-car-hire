@@ -32,69 +32,53 @@
     </div>
 
     <script>
-       document.getElementById('loginForm').onsubmit = async (e) => {
-        e.preventDefault();
-        
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
+        document.getElementById('loginForm').onsubmit = async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
 
-        // DYNAMIC API URL:
-        // If we are on localhost, talk to port 5000. 
-        // If we are on Render, use the relative path.
-        const API_BASE = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost' 
-            ? 'http://localhost:5001' // Changed from 5000 to 5001 to match the new backend port
-            : '';
+            // DYNAMIC API URL: Matches your backend on port 5001
+            const API_BASE = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost' 
+                ? 'http://localhost:5001' 
+                : '';
 
-        try {
-            const response = await fetch(`${API_BASE}/api/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
-            });
+            try {
+                const response = await fetch(`${API_BASE}/api/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
 
-            // This handles the "SyntaxError: Unexpected token <" 
-            // by checking if the response is actually JSON
-            const contentType = response.headers.get("content-type");
-            if (!contentType || !contentType.includes("application/json")) {
-                throw new TypeError("Oops, the server didn't send back JSON. Is the backend running on port 5000?");
-            }
-
-            const data = await response.json();
-
-            if (data.success) {
-                // Store the token
-                localStorage.setItem('adminToken', data.token);
-                
-                // Redirection Logic
-                if (data.role === 'admin') {
-                    window.location.href = 'admin.html';
-                } else {
-                    alert("Welcome back, " + (data.name || "Customer") + "!");
-                    window.location.href = 'index.html';
+                // Check for JSON response
+                const contentType = response.headers.get("content-type");
+                if (!contentType || !contentType.includes("application/json")) {
+                    throw new TypeError("Server error: Did not receive JSON. Is the backend running on port 5001?");
                 }
-            } else {
-                alert("Login Failed: " + data.message);
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // 1. Store the token for admin.html security check
+                    localStorage.setItem('adminToken', data.token);
+                    
+                    // 2. Role-based Redirection
+                    // Checking for both common role formats to ensure it works
+                    if (data.role === 'admin' || data.isAdmin === true) {
+                        window.location.href = 'admin.html';
+                    } else {
+                        alert("Login successful!");
+                        window.location.href = 'index.html';
+                    }
+                } else {
+                    // Show error from backend (e.g., "Invalid credentials")
+                    alert("Login Failed: " + (data.message || data.error || "Please check your details"));
+                }
+            } catch (err) {
+                alert("Connection Error: Is your node server running?");
+                console.error("Login Error:", err);
             }
-        } catch (err) {
-            alert(err.message || "Server error. Make sure your backend is running!");
-            console.error("Login Error:", err);
-        }
-    };
-    const result = await response.json();
-
-if (response.ok) {
-    // 1. Store the token
-    localStorage.setItem('adminToken', result.token);
-
-    // 2. Decide where to go
-    // If your backend sends a "role", use result.role === 'admin'
-    // Otherwise, for now, we send everyone who successfully logs in to the dashboard
-    if (result.isAdmin) { 
-        window.location.href = 'admin.html';
-    } else {
-        window.location.href = 'index.html'; // Regular users go to the homepage
-    }
-}
+        };
     </script>
 </body>
 </html>
