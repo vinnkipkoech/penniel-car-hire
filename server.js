@@ -12,22 +12,12 @@ const app = express();
 
 // Middleware
 app.use(cors({
-    origin: ["http://127.0.0.1:5500", "http://localhost:5500"], // Allows your Live Server
+    origin: ["http://127.0.0.1:5500", "http://localhost:5500", "https://penniel-car-hire.onrender.com"],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
 }));
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    
-    // Crucial: Handle the browser's "Preflight" check
-    if (req.method === 'OPTIONS') {
-        return res.sendStatus(200);
-    }
-    next();
-});
+
 app.use(express.json()); 
 app.use(express.static('public')); 
 
@@ -52,9 +42,28 @@ const User = mongoose.model('User', new mongoose.Schema({
     isAdmin: { type: Boolean, default: false }
 }));
 
-// 3. API Routes
+// 3. JWT Protection Middleware
+const protect = (req, res, next) => {
+    const authHeader = req.headers.authorization;
+    
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({ success: false, message: "Not authorized, no token provided" });
+    }
 
-// FLEET: Get all cars
+    const token = authHeader.split(' ')[1];
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = decoded;
+        next(); // Moves to the next function (the actual route)
+    } catch (err) {
+        return res.status(401).json({ success: false, message: "Invalid or expired token" });
+    }
+};
+
+// 4. API Routes
+
+// GET ALL CARS
 app.get('/api/cars', async (req, res) => {
     try {
         const cars = await Car.find();
@@ -64,7 +73,7 @@ app.get('/api/cars', async (req, res) => {
     }
 });
 
-// AUTH: Register new user (from Booking Modal)
+// REGISTER USER
 app.post('/api/register', async (req, res) => {
     try {
         const { fullName, email, password } = req.body;
@@ -76,72 +85,50 @@ app.post('/api/register', async (req, res) => {
     }
 });
 
-// --- UPDATED LOGIN ROUTE (Handles BOTH Admin and Client) ---
+// LOGIN (Handles Admin and User)
 app.post('/api/login', async (req, res) => {
     const { email, password } = req.body;
-
     try {
-        // A. Check for Admin First (Hardcoded for Demo)
         if (email === "admin@penniel.com" && password === "penniel2026") {
-            const token = jwt.sign({ role: 'admin' }, process.env.JWT_SECRET, { expiresIn: '1h' });
-            return res.json({ success: true, token, role: 'admin' });
+            const token = jwt.sign({ role: 'admin' }, process.env.JWT_SECRET, { expiresIn: '2h' });
+            return res.json({ success: true, token, role: 'admin', isAdmin: true });
         }
 
-        // B. Check MongoDB for regular clients
         const user = await User.findOne({ email, password });
-        
         if (user) {
-            const token = jwt.sign({ id: user._id, role: 'user' }, process.env.JWT_SECRET, { expiresIn: '1h' });
-            return res.json({ 
-                success: true, 
-                token, 
-                role: 'user', 
-                name: user.fullName 
-            });
+            const token = jwt.sign({ id: user._id, role: 'user' }, process.env.JWT_SECRET, { expiresIn: '2h' });
+            return res.json({ success: true, token, role: 'user', name: user.fullName });
         }
 
-        // C. If neither matches
         res.status(401).json({ success: false, message: "Invalid email or password" });
-
     } catch (err) {
         res.status(500).json({ success: false, message: "Server error during login" });
     }
 });
-// A simple protection middleware
-const protect = (req, res, next) => {
-    const token = req.headers.authorization;
-    if (!token) return res.status(401).json({ message: "Not authorized" });
-    next();
-};
 
-// Use the protector on sensitive routes
+// ADMIN: Add a new car (Protected)
 app.post('/api/admin/add-car', protect, async (req, res) => {
-    // Only works if a token is provided!
-});
-
-// ADMIN: Add a new car
-app.post('/api/admin/add-car', async (req, res) => {
     try {
         const newCar = new Car(req.body);
         await newCar.save();
-        res.status(201).json(newCar);
+        res.status(201).json({ success: true, car: newCar });
     } catch (err) {
-        res.status(400).json({ error: "Failed to add car" });
+        res.status(400).json({ success: false, error: "Failed to add car" });
     }
 });
 
-// DELETE A CAR
-app.delete('/api/admin/cars/:id', async (req, res) => {
+// ADMIN: Delete a car (Protected)
+app.delete('/api/admin/cars/:id', protect, async (req, res) => {
     try {
         await Car.findByIdAndDelete(req.params.id);
-        res.json({ message: "Car successfully removed from fleet" });
+        res.json({ success: true, message: "Car successfully removed from fleet" });
     } catch (err) {
-        res.status(500).json({ error: "Failed to delete car" });
+        res.status(500).json({ success: false, error: "Failed to delete car" });
     }
 });
 
-// 4. Start Server
-const PORT = process.env.PORT || 5001; // Changed from 5000 to 5001
+// 5. Start Server
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
+    console.log(`🚀 Server running on port ${PORT}`);
 });
