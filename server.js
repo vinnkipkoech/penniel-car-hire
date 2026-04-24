@@ -107,6 +107,17 @@ app.post('/api/login', async (req, res) => {
         res.status(500).json({ success: false, message: "Server error during login" });
     }
 });
+// A simple protection middleware
+const protect = (req, res, next) => {
+    const token = req.headers.authorization;
+    if (!token) return res.status(401).json({ message: "Not authorized" });
+    next();
+};
+
+// Use the protector on sensitive routes
+app.post('/api/admin/add-car', protect, async (req, res) => {
+    // Only works if a token is provided!
+});
 
 // ADMIN: Add a new car
 app.post('/api/admin/add-car', async (req, res) => {

@@ -82,12 +82,14 @@
 
     <nav class="bg-white shadow-md p-4 flex justify-between items-center sticky top-0 z-50 px-6">
         <h1 class="text-2xl font-black tracking-tighter">PENNIEL <span class="text-blue-600">CAR HIRE</span></h1>
-        <div class="hidden lg:flex space-x-8 font-bold text-xs uppercase tracking-widest text-gray-600">
+        <div class="hidden lg:flex items-center space-x-8 font-bold text-xs uppercase tracking-widest text-gray-600">
             <a href="#home" class="hover:text-blue-600">Home</a>
             <a href="#fleet" class="hover:text-blue-600">Fleet</a>
             <a href="#faq" class="hover:text-blue-600">FAQ</a>
             <a href="#terms" class="hover:text-blue-600">Terms</a>
             <a href="#contact" class="hover:text-blue-600">Contact</a>
+            
+            <a href="admin.html" id="admin-link" style="display: none;" class="text-blue-600 border-b-2 border-blue-600">Dashboard</a>
         </div>
         <a href="login.html" id="navLoginBtn" class="bg-gray-100 text-gray-800 px-6 py-2 rounded-full font-bold text-xs uppercase hover:bg-gray-200 transition">Client Login</a>
     </nav>
@@ -130,21 +132,21 @@
                 <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:border-blue-300 transition">
                     <h4 class="font-bold text-xl text-blue-600">What do I need to rent a car?</h4>
                     <p class="text-gray-600 mt-3 leading-relaxed">
-                        You need a valid **National ID or Passport**, a valid **Driving License** (held for at least 2 years), and a 50% deposit to secure your booking.
+                        You need a valid National ID or Passport, a valid Driving License (held for at least 2 years), and a 50% deposit to secure your booking.
                     </p>
                 </div>
 
                 <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:border-blue-300 transition">
                     <h4 class="font-bold text-xl text-blue-600">Is insurance included?</h4>
                     <p class="text-gray-600 mt-3 leading-relaxed">
-                        Yes, all our vehicles come with **Comprehensive Insurance**. However, the hirer is liable for a standard excess fee in case of minor damages or accidental claims.
+                        Yes, all our vehicles come with Comprehensive Insurance. However, the hirer is liable for a standard excess fee in case of minor damages or accidental claims.
                     </p>
                 </div>
 
                 <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:border-blue-300 transition">
                     <h4 class="font-bold text-xl text-blue-600">Do you offer chauffeur-driven services?</h4>
                     <p class="text-gray-600 mt-3 leading-relaxed">
-                        Yes. Professional drivers are available for **KSh 2,500/day** within Nairobi and **KSh 3,500/day** for trips outside the city.
+                        Yes. Professional drivers are available for KSh 2,500/day within Nairobi and KSh 3,500/day for trips outside the city.
                     </p>
                 </div>
             </div>
@@ -227,7 +229,7 @@
     <script>
         // 0. API URL Logic (Fixes 404)
         const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-            ? 'http://localhost:5001' // Changed from 5000 to 5001 to match the new backend port
+            ? 'http://localhost:5001' 
             : '';
 
         // 1. Modal Toggle
@@ -296,13 +298,31 @@
             } catch (err) { alert("Server error. Is your backend running?"); }
         };
 
-        // 5. Auth Check (Changes Login button if already logged in)
+        // 5. Auth Check (Enhanced for Dashboard and Logout)
         window.onload = () => {
             loadCars();
-            if(localStorage.getItem('adminToken')) {
-                const btn = document.getElementById('navLoginBtn');
-                btn.innerText = "Dashboard";
-                btn.href = "admin.html"; // Or a specific client dashboard if you make one
+            
+            const adminToken = localStorage.getItem('adminToken');
+            const adminLink = document.getElementById('admin-link');
+            const loginBtn = document.getElementById('navLoginBtn');
+
+            if (adminToken) {
+                // Show Dashboard link
+                if (adminLink) {
+                    adminLink.style.display = 'inline-block';
+                }
+                
+                // Change Login button to Logout
+                if (loginBtn) {
+                    loginBtn.innerText = "Logout";
+                    loginBtn.classList.replace('bg-gray-100', 'bg-red-50');
+                    loginBtn.classList.add('text-red-600');
+                    loginBtn.onclick = (e) => {
+                        e.preventDefault();
+                        localStorage.removeItem('adminToken');
+                        window.location.reload();
+                    };
+                }
             }
         };
     </script>

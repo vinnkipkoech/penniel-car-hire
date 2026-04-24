@@ -80,6 +80,21 @@
             console.error("Login Error:", err);
         }
     };
+    const result = await response.json();
+
+if (response.ok) {
+    // 1. Store the token
+    localStorage.setItem('adminToken', result.token);
+
+    // 2. Decide where to go
+    // If your backend sends a "role", use result.role === 'admin'
+    // Otherwise, for now, we send everyone who successfully logs in to the dashboard
+    if (result.isAdmin) { 
+        window.location.href = 'admin.html';
+    } else {
+        window.location.href = 'index.html'; // Regular users go to the homepage
+    }
+}
     </script>
 </body>
 </html>
